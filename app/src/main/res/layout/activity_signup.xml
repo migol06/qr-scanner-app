@@ -45,7 +45,7 @@
         app:layout_constraintGuide_end="50dp" />
 
     <EditText
-        android:id="@+id/editTextTextName"
+        android:id="@+id/editTxtUsername"
         android:layout_width="0dp"
         android:layout_height="41dp"
         android:layout_marginTop="16dp"
@@ -71,7 +71,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextName"
+        app:layout_constraintTop_toBottomOf="@+id/editTxtUsername"
         android:background="@drawable/custom_input"
         android:drawableLeft="@drawable/ic_baseline_email_24"
         android:drawablePadding="10dp"
