@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,16 +16,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView signup;
+    private TextView signup, forgotpassword;
     private EditText username, password;
     private Button button;
     private FirebaseAuth mAuth;
     private ProgressDialog mLoadingBar;
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,47 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        forgotpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText resetMail = new EditText(view.getContext());
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
+                alertDialog.setTitle("Reset Password");
+                alertDialog.setMessage("Enter your email");
+                alertDialog.setView(resetMail);
+
+                alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mAuth.sendPasswordResetEmail(resetMail.getText().toString()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(MainActivity.this, "Reset link is sent, Check your email", Toast.LENGTH_SHORT).show();
+                                dialogInterface.dismiss();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(MainActivity.this, "Error! Reset link not sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
+                alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+
+                alertDialog.show();
+
+
+
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     mLoadingBar.setCanceledOnTouchOutside(false);
                     mLoadingBar.show();
 
-                    mAuth.signInWithEmailAndPassword(username.getText().toString(), password.getText().toString())
+                    mAuth.signInWithEmailAndPassword(username.getText().toString().trim(), password.getText().toString().trim())
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -78,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean checkCredentials() {
-        String name=username.getText().toString();
-        String pass1=password.getText().toString();
+        String name=username.getText().toString().trim();
+        String pass1=password.getText().toString().trim();
 
         if(name.equals("")){
             showError(username, "Please input an email");
@@ -107,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
         username=findViewById(R.id.username);
         password=findViewById(R.id.editTextPassword);
         button=findViewById(R.id.button);
+        forgotpassword=findViewById(R.id.forgotpassword);
 
     }
 }

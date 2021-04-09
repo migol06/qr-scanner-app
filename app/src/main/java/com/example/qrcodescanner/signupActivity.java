@@ -73,10 +73,10 @@ public class signupActivity extends AppCompatActivity {
 
     private boolean checkCredentials() {
 
-        String username=name.getText().toString();
-        String useremail=email.getText().toString();
-        String pass1=password.getText().toString();
-        String pass2=reenterpass.getText().toString();
+        String username=name.getText().toString().trim();
+        String useremail=email.getText().toString().trim();
+        String pass1=password.getText().toString().trim();
+        String pass2=reenterpass.getText().toString().trim();
 
         if(username.equals("")){
             showError(name, "Please input a username");

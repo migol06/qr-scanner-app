@@ -89,12 +89,12 @@
         android:background="@drawable/custom_button"
         android:text="Login"
         android:textColor="@color/white"
-        app:backgroundTint="@color/black"
 
+        app:backgroundTint="@color/black"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
-        app:layout_constraintHorizontal_bias="0.891"
+        app:layout_constraintHorizontal_bias="0.875"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/forgotpassword" />
 
     <TextView
         android:id="@+id/textView2"
@@ -120,5 +120,16 @@
         android:textColor="@android:color/holo_red_dark"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toBottomOf="@+id/button" />
+
+    <TextView
+        android:id="@+id/forgotpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Forgot Password?"
+        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
