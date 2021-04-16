@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 public class HomeActivity extends AppCompatActivity {
-    private CardView carviewScan, cardViewList;
+    private CardView carviewScan, cardViewList, cardViewLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +32,14 @@ public class HomeActivity extends AppCompatActivity {
         });
 
 
+        cardViewLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(HomeActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
 
 
     }
@@ -39,5 +47,6 @@ public class HomeActivity extends AppCompatActivity {
     private void initViews() {
         carviewScan=findViewById(R.id.cardViewScan);
         cardViewList=findViewById(R.id.cardViewList);
+        cardViewLogout=findViewById(R.id.cardViewLogout);
     }
 }
