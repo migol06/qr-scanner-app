@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -24,6 +25,7 @@ import java.util.Date;
 public class HomeActivity extends AppCompatActivity {
     private CardView carviewScan, cardViewList, cardViewLogout;
     private DatabaseReference dbref;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +34,11 @@ public class HomeActivity extends AppCompatActivity {
         initViews();
 
         dbref= FirebaseDatabase.getInstance().getReference("Information");
+        mAuth = FirebaseAuth.getInstance();
 
         carviewScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(HomeActivity.this, "Scan", Toast.LENGTH_SHORT).show();
                 IntentIntegrator intentIntegrator = new IntentIntegrator(HomeActivity.this);
                 intentIntegrator.setPrompt("For flash use volume up key");
                 intentIntegrator.setBeepEnabled(true);
@@ -58,7 +60,9 @@ public class HomeActivity extends AppCompatActivity {
         cardViewLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(HomeActivity.this, "Logout", Toast.LENGTH_SHORT).show();
+                mAuth.signOut();
+                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
