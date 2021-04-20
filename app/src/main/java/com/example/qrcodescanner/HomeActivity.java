@@ -19,6 +19,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     private CardView carviewScan, cardViewList, cardViewLogout;
     private DatabaseReference dbref;
     private FirebaseAuth mAuth;
+    private  static  long fepoch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +79,19 @@ public class HomeActivity extends AppCompatActivity {
         );
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        Date currentTime = Calendar.getInstance().getTime();
-        final  String Timestamp = currentTime.toString();
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm");
+        final String currentTime = dateFormat.format(today);
+
+
+        try{
+            Date date = dateFormat.parse(currentTime);
+            long epochTime = date.getTime();
+            fepoch = epochTime;
+        }catch (Exception e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
 
         if (intentResult.getContents() != null){
             builder.setTitle("Result");
@@ -87,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     String data = intentResult.getContents();
-                    uploadInformation information = new uploadInformation(data,Timestamp);
+                    uploadInformation information = new uploadInformation(currentTime,data, fepoch);
                     //Toast.makeText(HomeActivity.this, information.getInfo(), Toast.LENGTH_SHORT).show();
                     dbref.child(dbref.push().getKey()).setValue(information);
                     //dbref.push().setValue(Timestamp + information);

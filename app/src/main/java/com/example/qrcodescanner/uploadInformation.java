@@ -4,14 +4,24 @@ public class uploadInformation {
 
     public String time;
     public String info;
+    public long epochtime;
 
 
     public uploadInformation(){
     }
 
-    public uploadInformation(String time, String info) {
+    public long getEpochtime() {
+        return epochtime;
+    }
+
+    public void setEpochtime(long epochtime) {
+        this.epochtime = epochtime;
+    }
+
+    public uploadInformation(String time, String info, long epochtime) {
         this.time = time;
         this.info = info;
+        this.epochtime = epochtime;
     }
 
     public String getTime() {

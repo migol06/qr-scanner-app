@@ -22,8 +22,8 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
 
     @Override
     protected void onBindViewHolder(@NonNull infoAdapter.Holder holder, int i, @NonNull uploadInformation uploadInformation) {
-        holder.time.setText(uploadInformation.getInfo());
-        holder.info.setText(uploadInformation.getTime());
+        holder.time.setText(uploadInformation.getTime());
+        holder.info.setText(uploadInformation.getInfo());
     }
 
     @NonNull
