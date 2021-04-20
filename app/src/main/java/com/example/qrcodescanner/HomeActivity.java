@@ -52,6 +52,8 @@ public class HomeActivity extends AppCompatActivity {
         cardViewList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, listActivity.class);
+                startActivity(intent);
                 Toast.makeText(HomeActivity.this, "List", Toast.LENGTH_SHORT).show();
             }
         });
@@ -84,7 +86,11 @@ public class HomeActivity extends AppCompatActivity {
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    dbref.push().setValue(Timestamp + intentResult.getContents());
+                    String data = intentResult.getContents();
+                    uploadInformation information = new uploadInformation(data,Timestamp);
+                    //Toast.makeText(HomeActivity.this, information.getInfo(), Toast.LENGTH_SHORT).show();
+                    dbref.child(dbref.push().getKey()).setValue(information);
+                    //dbref.push().setValue(Timestamp + information);
                     dialogInterface.dismiss();
                 }
             });

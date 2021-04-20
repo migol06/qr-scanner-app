@@ -49,5 +49,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
     implementation 'com.google.zxing:core:3.3.0'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+    implementation 'com.firebaseui:firebase-ui-database:4.3.2'
 
 }
