@@ -38,7 +38,7 @@ public class listActivity extends AppCompatActivity {
                 .build();
 
         adapter = new infoAdapter(options);
-        //recyclerView.setHasFixedSize(true);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 

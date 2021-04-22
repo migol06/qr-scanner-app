@@ -1,5 +1,6 @@
 package com.example.qrcodescanner;
 
+import android.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,25 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
 
     @Override
     protected void onBindViewHolder(@NonNull infoAdapter.Holder holder, int i, @NonNull uploadInformation uploadInformation) {
+
         holder.time.setText(uploadInformation.getTime());
+
         holder.info.setText(uploadInformation.getInfo());
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.view.getContext());
+                builder.setTitle("Information");
+
+                StringBuilder builder1 = new StringBuilder();
+                builder1.append(uploadInformation.getTime() + "\n" + uploadInformation.getInfo());
+
+                builder.setMessage(builder1);
+                builder.show();
+            }
+        });
+
     }
 
     @NonNull
@@ -36,12 +54,14 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
     public class Holder extends RecyclerView.ViewHolder {
         private TextView time, info;
         private ImageView imageView;
+        private View view;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
             time = itemView.findViewById(R.id.txtTime);
             info = itemView.findViewById(R.id.txtInfo);
             imageView = itemView.findViewById(R.id.recyclerImage);
+            view = itemView;
 
         }
     }
