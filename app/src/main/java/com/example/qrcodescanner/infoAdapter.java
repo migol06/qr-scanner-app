@@ -1,18 +1,21 @@
 package com.example.qrcodescanner;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.core.Tag;
 
 public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, infoAdapter.Holder > {
@@ -22,7 +25,7 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull infoAdapter.Holder holder, int i, @NonNull uploadInformation uploadInformation) {
+    protected void onBindViewHolder(@NonNull infoAdapter.Holder holder, int position, @NonNull uploadInformation uploadInformation) {
 
         holder.time.setText(uploadInformation.getTime());
 
@@ -41,6 +44,36 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
                 builder.show();
             }
         });
+        
+        holder.view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(holder.view.getContext());
+                builder.setTitle("Delete Information");
+                builder.setMessage("Are you sure to delete this information?");
+
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseDatabase.getInstance().getReference().child("Information")
+                                .child(getRef(position).getKey()).setValue(null);
+                    }
+                });
+
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                builder.show();
+
+
+                return true;
+            }
+        });
+
 
     }
 

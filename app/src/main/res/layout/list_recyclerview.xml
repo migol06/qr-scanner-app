@@ -42,7 +42,8 @@
                 android:layout_height="wrap_content"
                 android:text="Information"
                 android:textColor="#000000"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:maxLines="3"/>
         </LinearLayout>
 
     </RelativeLayout>
