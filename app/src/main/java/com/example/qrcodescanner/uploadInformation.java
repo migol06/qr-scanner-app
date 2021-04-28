@@ -5,6 +5,7 @@ public class uploadInformation {
     public String time;
     public String info;
     public long epochtime;
+    private Boolean isSelected = false;
 
 
     public uploadInformation(){
@@ -41,4 +42,11 @@ public class uploadInformation {
     }
 
 
+    public void setSelected(Boolean selected) {
+        isSelected = selected;
+    }
+
+    public Boolean getSelected() {
+        return isSelected;
+    }
 }

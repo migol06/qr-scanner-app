@@ -2,8 +2,14 @@ package com.example.qrcodescanner;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -11,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -18,7 +25,12 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.core.Tag;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, infoAdapter.Holder > {
+    List<Integer> list = new ArrayList<Integer>();
+
 
     public infoAdapter(@NonNull FirebaseRecyclerOptions<uploadInformation> options) {
         super(options);
@@ -48,27 +60,55 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
         holder.view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(holder.view.getContext());
-                builder.setTitle("Delete Information");
-                builder.setMessage("Are you sure to delete this information?");
+                uploadInformation.setSelected(!uploadInformation.getSelected());
+                //holder.view.setBackgroundColor(uploadInformation.getSelected() ? Color.LTGRAY : Color.WHITE);
 
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        FirebaseDatabase.getInstance().getReference().child("Information")
-                                .child(getRef(position).getKey()).setValue(null);
-                    }
-                });
+                if(uploadInformation.getSelected()){
+                    list.add(position);
 
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    ActionMode.Callback callback = new ActionMode.Callback() {
+                        @Override
+                        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                            MenuInflater menuInflater = actionMode.getMenuInflater();
+                            menuInflater.inflate(R.menu.listdeletemenu, menu);
+                            return true;
+                        }
 
-                    }
-                });
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                            holder.view.setBackgroundColor(Color.LTGRAY);
+                            holder.ivCheckbox.setVisibility(View.VISIBLE);
+                            holder.imageView.setVisibility(View.INVISIBLE);
+                            return true;
+                        }
 
-                builder.show();
+                        @Override
+                        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                            int id = menuItem.getItemId();
+                            switch (id){
+                                case R.id.delete:
 
+                                    for (int shit : list){
+                                        FirebaseDatabase.getInstance().getReference().child("Information")
+                                                .child(getRef(shit).getKey()).removeValue();
+                                    }
+                                    actionMode.finish();
+                                    break;
+                            }
+                            return true;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode actionMode) {
+
+                        }
+                    };
+                    ((AppCompatActivity) view.getContext()).startActionMode(callback);
+                } else{
+                    holder.view.setBackgroundColor(Color.WHITE);
+                    holder.ivCheckbox.setVisibility(View.GONE);
+                    holder.imageView.setVisibility(View.VISIBLE);
+                }
 
                 return true;
             }
@@ -86,7 +126,7 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
 
     public class Holder extends RecyclerView.ViewHolder {
         private TextView time, info;
-        private ImageView imageView;
+        private ImageView imageView, ivCheckbox;
         private View view;
 
         public Holder(@NonNull View itemView) {
@@ -95,6 +135,7 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
             info = itemView.findViewById(R.id.txtInfo);
             imageView = itemView.findViewById(R.id.recyclerImage);
             view = itemView;
+            ivCheckbox = itemView.findViewById(R.id.ivCheckBox);
 
         }
     }
