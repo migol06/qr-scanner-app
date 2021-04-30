@@ -27,7 +27,7 @@ public class listActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-        setTitle("Lists");
+        setTitle("List");
 
         initViews();
         setUpRecyclerView();

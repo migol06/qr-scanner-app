@@ -14,8 +14,7 @@
         android:theme="@style/Theme.QRCodeScanner">
         <activity android:name=".listActivity"></activity>
         <activity
-            android:name=".HomeActivity"
-            android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />
+            android:name=".HomeActivity" />
         <activity
             android:name=".signupActivity"
             android:theme="@style/Theme.MaterialComponents.Light.NoActionBar" />

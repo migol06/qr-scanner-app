@@ -54,14 +54,6 @@ public class MainActivity extends AppCompatActivity {
         initViews();
 
 
-        //OnClick the signup
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, signupActivity.class));
-            }
-        });
-
         //OnClick the forgot password
         forgotpassword.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initViews() {
-        signup=findViewById(R.id.Signup);
         username=findViewById(R.id.username);
         password=findViewById(R.id.editTextPassword);
         button=findViewById(R.id.button);
