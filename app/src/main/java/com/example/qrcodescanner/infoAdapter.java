@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ActionMenuView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,7 +62,6 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
             @Override
             public boolean onLongClick(View view) {
                 uploadInformation.setSelected(!uploadInformation.getSelected());
-                //holder.view.setBackgroundColor(uploadInformation.getSelected() ? Color.LTGRAY : Color.WHITE);
 
                 if(uploadInformation.getSelected()){
                     list.add(position);
@@ -87,10 +87,9 @@ public class infoAdapter extends FirebaseRecyclerAdapter<uploadInformation, info
                             int id = menuItem.getItemId();
                             switch (id){
                                 case R.id.delete:
-
-                                    for (int shit : list){
+                                    for (int positions : list){
                                         FirebaseDatabase.getInstance().getReference().child("Information")
-                                                .child(getRef(shit).getKey()).removeValue();
+                                                .child(getRef(positions).getKey()).removeValue();
                                     }
                                     actionMode.finish();
                                     break;
