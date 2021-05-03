@@ -106,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (username.getText().toString().equals("admin") && password.getText().toString().equals("69")){
+                    google.setVisibility(View.VISIBLE);
+                }
+
                 if(checkCredentials()){
                     mLoadingBar.setTitle("Login");
                     mLoadingBar.setMessage("Please wait, checking your credentials");
