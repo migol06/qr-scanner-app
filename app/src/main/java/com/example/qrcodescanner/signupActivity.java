@@ -15,6 +15,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
 public class signupActivity extends AppCompatActivity {
 
@@ -55,7 +58,7 @@ public class signupActivity extends AppCompatActivity {
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
                             }else {
-                                Toast.makeText(signupActivity.this, task.getException().toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(signupActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 mLoadingBar.dismiss();
                             }
                         }
@@ -94,7 +97,7 @@ public class signupActivity extends AppCompatActivity {
         }
 
         if (pass1.length() < 6){
-            showError(password, "Weak Password");
+            showError(password, "Password should be at least 6 characters");
             return false;
         }
 
