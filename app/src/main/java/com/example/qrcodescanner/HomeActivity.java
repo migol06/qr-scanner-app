@@ -5,9 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,6 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     private DatabaseReference dbref;
     private FirebaseAuth mAuth;
     private  static  long fepoch;
+    private ConstraintLayout parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +50,7 @@ public class HomeActivity extends AppCompatActivity {
         carviewScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                IntentIntegrator intentIntegrator = new IntentIntegrator(HomeActivity.this);
-                intentIntegrator.setPrompt("For flash use volume up key");
-                intentIntegrator.setBeepEnabled(true);
-                intentIntegrator.setOrientationLocked(true);
-                intentIntegrator.setCaptureActivity(Capture.class);
-                intentIntegrator.initiateScan();
+                scanQr();
             }
         });
 
@@ -61,7 +60,6 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(HomeActivity.this, listActivity.class);
                 startActivity(intent);
-                Toast.makeText(HomeActivity.this, "List", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -74,6 +72,15 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void scanQr() {
+        IntentIntegrator intentIntegrator = new IntentIntegrator(HomeActivity.this);
+        intentIntegrator.setPrompt("For flash use volume up key");
+        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.setOrientationLocked(true);
+        intentIntegrator.setCaptureActivity(Capture.class);
+        intentIntegrator.initiateScan();
     }
 
     @Override
@@ -124,16 +131,27 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     String data = intentResult.getContents();
-                    uploadInformation information = new uploadInformation(currentTime,data, fepoch);
-                    //Toast.makeText(HomeActivity.this, information.getInfo(), Toast.LENGTH_SHORT).show();
-                    dbref.child(dbref.push().getKey()).setValue(information);
-                    //dbref.push().setValue(Timestamp + information);
-                    dialogInterface.dismiss();
+                    if (data.contains("|")){
+                        uploadInformation information = new uploadInformation(currentTime,data, fepoch);
+                        dbref.child(dbref.push().getKey()).setValue(information);
+                        dialogInterface.dismiss();
+                    }else{
+                        Snackbar.make(parent, "Invalid Information, Please try again", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Retry", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        scanQr();
+                                    }
+                                })
+                                .setActionTextColor(Color.RED)
+                                .show();
+                    }
+
                 }
             });
             builder.show();
         }else{
-            Toast.makeText(this, "You did not scan anything", Toast.LENGTH_SHORT).show();
+            Snackbar.make(parent, "No information scanned", Snackbar.LENGTH_SHORT).show();
         }
 
 
@@ -148,5 +166,7 @@ public class HomeActivity extends AppCompatActivity {
         carviewScan=findViewById(R.id.cardViewScan);
         cardViewList=findViewById(R.id.cardViewList);
         cardViewLogout=findViewById(R.id.cardViewLogout);
+        parent = findViewById(R.id.homeparent);
+
     }
 }
